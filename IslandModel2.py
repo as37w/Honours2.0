@@ -24,11 +24,11 @@ TSP_NAME = "bayg29"
 tsp = tsp.TravelingSalesmanProblem(TSP_NAME)
 
 
-POPULATION_SIZE = 300
-MAX_GENERATIONS = 15
+POPULATION_SIZE = 1000
+MAX_GENERATIONS = 30
 HALL_OF_FAME_SIZE = 1
-P_CROSSOVER = 0.9
-P_MUTATION = 0.1
+P_CROSSOVER = 0.6
+P_MUTATION = 0.4
 
 toolbox = base.Toolbox()
 
@@ -68,7 +68,7 @@ def main():
 
     hof = tools.HallOfFame(HALL_OF_FAME_SIZE)
 
-    NGEN, FREQ = 40, 5
+    NGEN, FREQ = 40, 15
 
     toolbox.register("algorithm", algorithms.eaSimple, toolbox=toolbox, cxpb=P_CROSSOVER, mutpb=P_MUTATION,
                                                       ngen=MAX_GENERATIONS, stats=stats, halloffame=hof, verbose=True)
@@ -78,19 +78,21 @@ def main():
 
 
 
-    for i in range(MAX_GENERATIONS):
+    for i in range(0, MAX_GENERATIONS, FREQ):
         results = toolbox.map(toolbox.algorithm, islands)
         islands = [population for population, logbook in results]
-        tools.migRing(islands, 5, tools.selBest)
+        tools.migRing(islands, 10, tools.selBest)
 
         record = stats.compile(population)
-        logbook.record(gen=i, evals=len(population), **record)
+        logbook.record(gen=i , evals=len(population), **record)
         hof.update(population)
         best = hof.items[0]
+
+        print(i)
         print("-- Best Ever Individual = ", best)
         print("-- Best Ever Fitness = ", best.fitness.values[0])
 
-        if i == MAX_GENERATIONS - 1:
+        if i == FREQ:
             plt.figure(1)
             tsp.plotData(best)
 
