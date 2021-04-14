@@ -16,15 +16,15 @@ import DEAPTSP as tsp
 RANDOM_SEED = 42
 random.seed(RANDOM_SEED)
 
-TSP_NAME = "bayg29"
+TSP_NAME = "eil51"
 tsp = tsp.TravelingSalesmanProblem(TSP_NAME)
 
 
 POPULATION_SIZE = 1000
 MAX_GENERATIONS = 300
 HALL_OF_FAME_SIZE = 1
-P_CROSSOVER = 0.6
-P_MUTATION = 0.4
+P_CROSSOVER = 0.7
+P_MUTATION = 0.3
 
 toolbox = base.Toolbox()
 
@@ -50,8 +50,8 @@ def tpsDistance(individual):
 
 
 toolbox.register("evaluate", tpsDistance)
-toolbox.register("select", tools.selTournament, tournsize=3)
-toolbox.register("mate", tools.cxOrdered)
+toolbox.register("select", tools.selTournament, tournsize=6)
+toolbox.register("mate", tools.cxUniform, indpb=1.0)
 toolbox.register("mutate", tools.mutShuffleIndexes, indpb=1.0/len(tsp))
 
 
@@ -73,7 +73,7 @@ def main():
 
 
     population, logbook = algorithms.eaSimple(population, toolbox, cxpb=P_CROSSOVER, mutpb=P_MUTATION,
-                                              ngen=MAX_GENERATIONS, stats=stats, halloffame=hof, verbose=True)
+                                              ngen=MAX_GENERATIONS,  stats=stats, halloffame=hof, verbose=True)
 
 
     best = hof.items[0]

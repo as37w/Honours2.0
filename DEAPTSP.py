@@ -114,20 +114,3 @@ class TravelingSalesmanProblem:
         return plt
 
 
-# test
-def main():
-    tsp = TravelingSalesmanProblem("bayg29")
-
-    optimalSolution = [0, 27, 5, 11, 8, 25, 2, 28, 4, 20, 1, 19, 9, 3, 14, 17, 13, 16, 21, 10, 18, 24, 6, 22, 7, 26, 15, 12, 23]
-
-    print("Problem name: " + tsp.name)
-    print("Optimal solution = ", optimalSolution)
-    print("Optimal distance = ", tsp.getTotalDistance(optimalSolution))
-
-
-    plot = tsp.plotData(optimalSolution)
-    plot.show()
-
-
-if __name__ == "__main__":
-    main()

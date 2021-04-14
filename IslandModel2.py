@@ -20,12 +20,12 @@ import numpy as np
 RANDOM_SEED = 42
 random.seed(RANDOM_SEED)
 
-TSP_NAME = "bayg29"
+TSP_NAME = "a280"
 tsp = tsp.TravelingSalesmanProblem(TSP_NAME)
 
 
 POPULATION_SIZE = 1000
-MAX_GENERATIONS = 30
+MAX_GENERATIONS = 50
 HALL_OF_FAME_SIZE = 1
 P_CROSSOVER = 0.6
 P_MUTATION = 0.4
@@ -45,7 +45,7 @@ def tpsDistance(individual):
 
 
 toolbox.register("evaluate", tpsDistance)
-toolbox.register("select", tools.selTournament, tournsize=3)
+toolbox.register("select", tools.selTournament, tournsize=6)
 toolbox.register("mate", tools.cxOrdered)
 toolbox.register("mutate", tools.mutShuffleIndexes, indpb=1.0/len(tsp))
 toolbox.register("map", futures.map)
@@ -53,7 +53,7 @@ toolbox.register("map", futures.map)
 def main():
     population = toolbox.populationCreator(n=POPULATION_SIZE)
     random.seed(64)
-    NISLES = 5
+    NISLES = 6
 
 
 
@@ -68,7 +68,7 @@ def main():
 
     hof = tools.HallOfFame(HALL_OF_FAME_SIZE)
 
-    NGEN, FREQ = 40, 15
+    NGEN, FREQ = 40, 30
 
     toolbox.register("algorithm", algorithms.eaSimple, toolbox=toolbox, cxpb=P_CROSSOVER, mutpb=P_MUTATION,
                                                       ngen=MAX_GENERATIONS, stats=stats, halloffame=hof, verbose=True)
@@ -81,7 +81,7 @@ def main():
     for i in range(0, MAX_GENERATIONS, FREQ):
         results = toolbox.map(toolbox.algorithm, islands)
         islands = [population for population, logbook in results]
-        tools.migRing(islands, 10, tools.selBest)
+        tools.migRing(islands, 25, tools.selBest)
 
         record = stats.compile(population)
         logbook.record(gen=i , evals=len(population), **record)
